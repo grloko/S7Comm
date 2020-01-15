@@ -1,0 +1,13 @@
+{
+  "name": "conn",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "azure-iot-device": "^1.12.1",
+    "azure-iot-device-mqtt": "^1.11.1",
+    "dateformat": "^3.0.3",
+    "memfs": "^3.0.3",
+    "nodes7": "^0.3.10"
+  }
+}
