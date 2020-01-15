@@ -1,0 +1,19 @@
+{
+	"clp": {
+		"port": 102,
+		"host": "192.168.100.15",
+		"rack": 0,
+		"slot": 1
+	},
+	"azure": {
+		"connString": "HostName=iotc-a3dc190b-c251-49e6-b41f-5873e83c0967.azure-devices.net;DeviceId=0638f802-e9b8-4aa8-a2fc-8b99898fd5bb;SharedAccessKey=5SQRkJJ/Tx2kxO1qBtce/otZYPlY4ji4qZEzI9WkjZg"
+	},
+	"variables": {
+		"var1": "DB1,REAL0",
+		"var2": "DB1,REAL4",
+		"var3": "DB1,REAL8",
+		"var4": "DB1,REAL12",
+		"var5": "DB1,REAL16",
+		"var6": "DB1,X20.0"
+	}
+}
