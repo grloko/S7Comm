@@ -69,10 +69,9 @@ function checkError() {
             for (let i = 1; i < line.length - 1; i++) {
                 newFileContent += line[i] + '\n'
             }
-            sendData(line[0])
-            console.log('line 0: ' + line[0])
             fs.writeFileSync(filenameError, newFileContent)
             console.log('newFileContent: ' + newFileContent)
+            sendData(line[0].toString())
         }
     })
 }

@@ -49,7 +49,10 @@ function valuesRead(err, values) {
             waterFlow: values.var4,
             materialApplicationWeight: values.var5
         })
-        azure.send(message)
+        // ADICIONA DADOS ARTIFICIALMENTE NO ARQUIVO ./OUTPUT/NOTSENT/ERROR.TXT
+        //let newMessage = message.toString() + '\n'
+        //fs.appendFileSync('./output/notsent/error.txt', newMessage)
+        //azure.send(message)
     }
 }
 

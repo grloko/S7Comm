@@ -9,5 +9,7 @@
     "dateformat": "^3.0.3",
     "memfs": "^3.0.3",
     "nodes7": "^0.3.10"
-  }
+  },
+  "repository": "https://github.com/grloko/S7comm",
+  "author": "Gabriel Rios <gabrielrsouza04@hotmail.com>"
 }
