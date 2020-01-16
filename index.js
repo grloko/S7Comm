@@ -52,7 +52,7 @@ function valuesRead(err, values) {
         // ADICIONA DADOS ARTIFICIALMENTE NO ARQUIVO ./OUTPUT/NOTSENT/ERROR.TXT
         //let newMessage = message.toString() + '\n'
         //fs.appendFileSync('./output/notsent/error.txt', newMessage)
-        //azure.send(message)
+        azure.send(message)
     }
 }
 
