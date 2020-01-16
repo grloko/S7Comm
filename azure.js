@@ -8,64 +8,73 @@ let client = null
 let filenameError = './output/notsent/error.txt'
 
 var connectToIoTHub = function(message) {
-  if (!client) {
-    console.log('Connection to IoT Hub not established yet, connecting!')
-    client = Client.fromConnectionString(config.azure.connString, Mqtt)
-    client.open((err) => {
-      if (err) {
-        console.log('Could not connect: ' + err.message)
-      } else {
-        console.log('Connected to Azure IoT Hub.')
-        client.on('error', (err) => {
-          console.log(err.message)
+    if (!client) {
+        console.log('Connection to IoT Hub not established yet, connecting!')
+        client = Client.fromConnectionString(config.azure.connString, Mqtt)
+        client.open((err) => {
+            if (err) {
+                console.log('Could not connect: ' + err.message)
+            } else {
+                console.log('Connected to Azure IoT Hub.')
+                client.on('error', (err) => {
+                    console.log(err.message)
+                })
+                client.on('disconnect', () => {
+                    disconnectFromIoTHub()
+                })
+            }
         })
-        client.on('disconnect', () => {
-          disconnectFromIoTHub()
-        })
-      }
-    })
-  }
-  sendData(message)
+    }
+    sendData(message)
 }
 
 function sendData(data) {
-  var message = new Message(data)
-  client.sendEvent(message, (err, res) => {
-    if (err) {
-      console.log('Error while trying to send message: ' + err.toString())
-      let errorMessage = JSON.stringify(data) + '\n'
-      fs.appendFileSync(filenameError, errorMessage)
-    } else {
-      console.log('Message sent\n   Payload: ' + data.toString())
-      checkError()
-    }
-  })
+    var message = new Message(data)
+    client.sendEvent(message, (err, res) => {
+        if (err) {
+            console.log('Error while trying to send message: ' + err.toString())
+            let errorMessage = JSON.stringify(data) + '\n'
+            fs.appendFileSync(filenameError, errorMessage)
+        } else {
+            console.log('Message sent\n   Payload: ' + data.toString())
+            checkError()
+        }
+    })
 }
 
 function disconnectFromIoTHub() {
-  if (client) {
-    console.log('Disconnecting from Azure IoT Hub')
-    client.removeAllListeners()
-    client.close(printResultFor('close'))
-    client = null
-  }
+    if (client) {
+        console.log('Disconnecting from Azure IoT Hub')
+        client.removeAllListeners()
+        client.close(printResultFor('close'))
+        client = null
+    }
 }
 
 function printResultFor(op) {
-  return function printResult(err, res) {
-    if (err) console.log(op + ' error: ' + err.toString())
-    if (res) console.log(op + ' status: ' + res.constructor.name)
-  }
+    return function printResult(err, res) {
+        if (err) console.log(op + ' error: ' + err.toString())
+        if (res) console.log(op + ' status: ' + res.constructor.name)
+    }
 }
 
 function checkError() {
-  fs.readFile(filenameError, 'utf8', (err, data) => {
-    if (err) {
-      console.log(`Error on reading notsent file: ${err.message}`)
-    } else if (data) {
-      console.log(`Error file content: ${data}`)
-    }
-  })
+    fs.readFile(filenameError, 'utf8', (err, data) => {
+        if (err) {
+            console.log(`Error on reading notsent file: ${err.message}`)
+        } else if (data) {
+            console.log(`Error file content: ${data}`)
+            let line = ([] = data.split(/\r?\n/))
+            let newFileContent = ''
+            for (let i = 1; i < line.length - 1; i++) {
+                newFileContent += line[i] + '\n'
+            }
+            sendData(line[0])
+            console.log('line 0: ' + line[0])
+            fs.writeFileSync(filenameError, newFileContent)
+            console.log('newFileContent: ' + newFileContent)
+        }
+    })
 }
 
 exports.send = connectToIoTHub
