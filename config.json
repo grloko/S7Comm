@@ -13,7 +13,6 @@
         "var2": "DB1,REAL4",
         "var3": "DB1,REAL8",
         "var4": "DB1,REAL12",
-        "var5": "DB1,REAL16",
-        "var6": "DB1,X20.0"
+        "var5": "DB1,REAL16"
     }
 }

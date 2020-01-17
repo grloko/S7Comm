@@ -53,11 +53,12 @@ function valuesRead(err, values) {
 }
 
 function createsCSV(today, value) {
-    let data = `${today},${value.var1},${value.var2},${value.var3},${value.var4},${value.var5},${value.var6}\n`
+    let data = `${today},${value.var1},${value.var2},${value.var3},${value.var4},${value.var5}\n`
     let filenameCSV = './output/' + dateFormat(today, 'mmddyyyy') + '.csv'
     fs.exists(filenameCSV, (exists) => {
         if (!exists) {
-            let title = 'timestamp,var1,var2,var3,var4,var5,var6\n'
+            let title =
+                'date,currentWeight,tankPressure,airDragPressure,waterFlow,materialApplicationWeight\n'
             fs.writeFile(filenameCSV, title, () => {
                 fs.appendFileSync(filenameCSV, data)
             })
