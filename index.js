@@ -6,6 +6,8 @@ const fs = require('fs')
 
 const conn = new nodes7()
 
+let filenameError = './output/notsent/error.txt'
+
 conn.initiateConnection(
     {
         port: config.clp.port,
@@ -49,16 +51,13 @@ function valuesRead(err, values) {
             waterFlow: values.var4,
             materialApplicationWeight: values.var5
         })
-        // ADICIONA DADOS ARTIFICIALMENTE NO ARQUIVO ./OUTPUT/NOTSENT/ERROR.TXT
-        //let newMessage = message.toString() + '\n'
-        //fs.appendFileSync('./output/notsent/error.txt', newMessage)
         azure.send(message)
     }
 }
 
 function createsCSV(today, values) {
-    let filenameCSV = './output/' + dateFormat(today, 'mmddyyyy') + '.csv'
     let data = `${today},${values.var1},${values.var2},${values.var3},${values.var4},${values.var5},${values.var6}\n`
+    let filenameCSV = './output/' + dateFormat(today, 'mmddyyyy') + '.csv'
     fs.exists(filenameCSV, (exists) => {
         if (!exists) {
             let title = 'timestamp,var1,var2,var3,var4,var5,var6\n'
@@ -70,3 +69,25 @@ function createsCSV(today, values) {
         }
     })
 }
+
+setInterval(() => {
+    fs.exists(filenameError, (exists) => {
+        if (exists) {
+            fs.readFile(filenameError, 'utf8', (err, data) => {
+                if (err) {
+                    console.log(`Error on reading notsent file: ${err.message}`)
+                } else if (data) {
+                    let line = ([] = data.split(/\r?\n/))
+                    console.log('message to send: ' + line[0])
+                    let newFileContent = ''
+                    for (let i = 1; i < line.length - 1; i++) {
+                        newFileContent += line[i] + '\n'
+                    }
+                    fs.writeFileSync(filenameError, newFileContent)
+                    console.log('newFileContent: ' + newFileContent)
+                    azure.send(line[0].toString())
+                }
+            })
+        }
+    })
+}, 1000)

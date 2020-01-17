@@ -37,7 +37,6 @@ function sendData(data) {
             fs.appendFileSync(filenameError, errorMessage)
         } else {
             console.log('Message sent\n   Payload: ' + data.toString())
-            checkError()
         }
     })
 }
@@ -56,24 +55,6 @@ function printResultFor(op) {
         if (err) console.log(op + ' error: ' + err.toString())
         if (res) console.log(op + ' status: ' + res.constructor.name)
     }
-}
-
-function checkError() {
-    fs.readFile(filenameError, 'utf8', (err, data) => {
-        if (err) {
-            console.log(`Error on reading notsent file: ${err.message}`)
-        } else if (data) {
-            console.log(`Error file content: ${data}`)
-            let line = ([] = data.split(/\r?\n/))
-            let newFileContent = ''
-            for (let i = 1; i < line.length - 1; i++) {
-                newFileContent += line[i] + '\n'
-            }
-            fs.writeFileSync(filenameError, newFileContent)
-            console.log('newFileContent: ' + newFileContent)
-            sendData(line[0].toString())
-        }
-    })
 }
 
 exports.send = connectToIoTHub
