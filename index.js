@@ -40,9 +40,6 @@ function valuesRead(err, values) {
         let today = Date.now()
         let todayFormatted = dateFormat(today, 'mm/dd/yyyy-HH:MM:ss')
         createsCSV(todayFormatted, values)
-        values = Object.assign(values, {
-            timestamp: today
-        })
         let message = JSON.stringify({
             date: todayFormatted,
             currentWeight: values.var1,
@@ -55,8 +52,8 @@ function valuesRead(err, values) {
     }
 }
 
-function createsCSV(today, values) {
-    let data = `${today},${values.var1},${values.var2},${values.var3},${values.var4},${values.var5},${values.var6}\n`
+function createsCSV(today, value) {
+    let data = `${today},${value.var1},${value.var2},${value.var3},${value.var4},${value.var5},${value.var6}\n`
     let filenameCSV = './output/' + dateFormat(today, 'mmddyyyy') + '.csv'
     fs.exists(filenameCSV, (exists) => {
         if (!exists) {
